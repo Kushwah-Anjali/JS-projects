@@ -1,28 +1,28 @@
 let input = document.querySelector("input");
-let addbtn = document.querySelector("button");
 let taskList = document.querySelector("#task-list");
-addbtn.addEventListener("click", () => {
-  if (input.value === "") return;
+let addTask = document.querySelector("#add");
+let currentTask = null;
 
+addTask.addEventListener("click", () => {
+  if (input.value === " ") return;
   let list = document.createElement("li");
+  let updateBtn = document.createElement("button");
+  let deleteBtn = document.createElement("button");
+  let task = document.createElement("span");
+  task.textContent = input.value;
 
-  let deletebtn = document.createElement("button");
-  let updatebtn = document.createElement("button");
-
-  list.textContent = input.value;
-
-  deletebtn.textContent = "delete";
-  updatebtn.textContent = "update";
-
-  list.appendChild(deletebtn);
-  list.appendChild(updatebtn);
-
+  updateBtn.textContent = "update";
+  deleteBtn.textContent = "delete";
+  list.appendChild(task);
+  list.appendChild(updateBtn);
+  list.appendChild(deleteBtn);
   taskList.appendChild(list);
-  deletebtn.addEventListener("click", () => {
+  deleteBtn.addEventListener("click", () => {
     list.remove();
   });
-  updatebtn.addEventListener("click", () => {
-    
+  updateBtn.addEventListener("click", () => {
+    currentTask = task.textContent;
+    input.value =currentTask;
   });
   input.value = "";
 });
