@@ -4,7 +4,6 @@ let taskList = document.querySelector("#task-list");
 let currentTask = null;
 let tasks = [];
 addBtn.addEventListener("click", () => {
-  if (input.value.trim() === "") return;
   if (currentTask !== null) {
     updateTask();
   } else {
@@ -13,6 +12,8 @@ addBtn.addEventListener("click", () => {
 });
 
 function createTask() {
+  if (input.value.trim() === "") return;
+
   const taskObj = {
     id: Date.now(),
     text: input.value,
@@ -31,7 +32,6 @@ function render() {
     let updateBtn = document.createElement("button");
     task.textContent = e.text;
     list.setAttribute("data-id", e.id);
-
     list.classList.add(
       "list-group-item",
       "d-flex",
@@ -55,7 +55,11 @@ function render() {
   });
 }
 function updateTask() {
-  currentTask.textContent = input.value;
+  if (input.value.trim() === "") return;
+  let task = tasks.find((m) => m.id === currentTask);
+  if (!task) return;
+  task.text = input.value;
+  render();
   addBtn.innerHTML = `<i class="bi bi-plus-lg"></i>`;
   addBtn.classList.remove("btn-warning");
   addBtn.classList.add("btn-primary");
@@ -71,10 +75,12 @@ taskList.addEventListener("click", (e) => {
     render();
   }
   if (e.target.closest(".update")) {
-    let li=e.target.closest("li");
-    let task = li.querySelector("span");
+    let li = e.target.closest("li");
+    let id = Number(li.dataset.id);
+    let task = tasks.find((m) => m.id === id);
+    if (!task) return;
     currentTask = id;
-    input.value = .textContent;
+    input.value = task.text;
     addBtn.innerHTML = `<i class="bi bi-check-lg"></i>`;
     addBtn.classList.remove("btn-primary");
     addBtn.classList.add("btn-warning");
